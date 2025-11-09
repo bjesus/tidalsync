@@ -16,22 +16,23 @@ def main():
         try:
             print("Syncing album:", album.name)
             tidalapi.Favorites(new, new.user.id).add_album(album_id=album.id)
-        except:
-            print("Failed... 💩")
+
+        except Exception as e:
+            print(f"Failed... 💩 {e}")
             failures.append(["album", album])
     for artist in tidalapi.Favorites(old, old.user.id).artists():
         try:
             print("Syncing artist:", artist.name)
             tidalapi.Favorites(new, new.user.id).add_artist(artist_id=artist.id)
-        except:
-            print("Failed... 💩")
+        except Exception as e:
+            print(f"Failed... 💩 {e}")
             failures.append(["artist", artist])
     for track in tidalapi.Favorites(old, old.user.id).tracks():
         try:
             print("Syncing track:", track.name)
             tidalapi.Favorites(new, new.user.id).add_track(track_id=track.id)
-        except:
-            print("Failed... 💩")
+        except Exception as e:
+            print(f"Failed... 💩 {e}")
             failures.append(["track", track])
 
     playlists = old.user.playlists()
@@ -39,8 +40,12 @@ def main():
     for playlist in playlists:
         print("Creating " + playlist.name)
         new_playlist = new.user.create_playlist(playlist.name, "")
-        print("Adding tracks to new playlist " + playlist.name)
-        new_playlist.add([x.id for x in playlist.tracks()])
+        tracks_to_add = [x.id for x in playlist.tracks()]
+        if tracks_to_add:
+            print("Adding tracks to new playlist " + playlist.name)
+            new_playlist.add(tracks_to_add)
+        else:
+            print(f"Playlist {playlist.name} has no tracks, skipping adding tracks.")
         sleep(3)
 
     print("\n☯ Done syncing everything.")

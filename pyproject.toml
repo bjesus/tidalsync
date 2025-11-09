@@ -1,10 +1,10 @@
 [project]
 name = "tidalsync"
-version = "0.1.1"
+version = "0.1.2"
 description = "Transfer playlists, liked songs and albums from one Tidal account to another"
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = ["tidalapi>=0.8.3"]
+dependencies = ["tidalapi>=0.8.8"]
 
 [build-system]
 requires = ["setuptools"]
